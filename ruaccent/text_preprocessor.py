@@ -20,6 +20,13 @@ class TextPreprocessor:
         return valid_words, remaining_text_res
 
     @staticmethod
+    def word_spans(string):
+        """(start, end) in `string` of every word split_by_words returns, in the same order."""
+        string = string.replace(" - ",' ~ ')
+        match = re.finditer(r"\w*(?:\+\w+)*|[^\w\s]+", string.lower())
+        return [(x.start(), x.end()) for x in match if x.end() > x.start()]
+
+    @staticmethod
     def split_by_sentences(string):
         sentences = list(sentenize(string))
         if len(sentences) == 0:
