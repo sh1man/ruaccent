@@ -231,8 +231,10 @@ class RUAccent:
         for i, word in enumerate(words):
             lower_word = word.lower()
             words[i] = fix_capital(word, self.yo_words.get(lower_word, word))
-            if yo_predictions and yo_predictions[i] == "YO":
-                words[i] = fix_capital(word, self.yo_homographs.get(lower_word, word))
+            # Only a homograph is the resolver's to decide: a YO on any other word used to
+            # put the word back as written, undoing the ё the dictionary had just given it.
+            if yo_predictions and yo_predictions[i] == "YO" and lower_word in self.yo_homographs:
+                words[i] = fix_capital(word, self.yo_homographs[lower_word])
         return words
 
 

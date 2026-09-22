@@ -142,3 +142,8 @@ def test_mark_polysyllables_overrules_the_predictor_except_for_one_syllable():
     assert ru.process_all("Да, золотой или нет") == "Да, золотой или нет"
     ru.mark_polysyllables = True
     assert ru.process_all("Да, золотой или нет", skip_regex=PUNCTUATION) == "Да, з+олотой +или нет"
+
+
+def test_a_yo_from_the_dictionary_survives_a_resolver_that_says_yo_on_it():
+    ru = accentizer(yo=["еще", "все"])  # "еще" is in yo_words, not a homograph
+    assert ru.process_all("еще и все") == "+ещё и всё"  # the fake accent model marks the first vowel
